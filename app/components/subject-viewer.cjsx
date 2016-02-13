@@ -5,6 +5,7 @@ alert = require '../lib/alert'
 getSubjectLocation = require '../lib/get-subject-location'
 CollectionsManagerIcon = require '../collections/manager-icon'
 FrameViewer = require './frame-viewer'
+FlagSubjectButton = require './flag-subject-button'
 
 NOOP = Function.prototype
 
@@ -67,7 +68,7 @@ module.exports = React.createClass
       mainDisplay = @renderFrame @state.frame
     else
       mainDisplay = (@renderFrame frame, {key: "frame-#{frame}"} for frame of @props.subject.locations)
-          
+
 
     tools = switch type
       when 'image'
@@ -116,6 +117,8 @@ module.exports = React.createClass
             </span>
         </span>}
         <span>
+          {if not @props.workflow.enable_subject_flags
+            <FlagSubjectButton project={@props.project} subject={@props.subject} user={@props.user} workflow={@props.workflow} />}
           {if @props.subject?.metadata?
             <button type="button" aria-label="Metadata" title="Metadata" className="metadata-toggle" onClick={@showMetadata}><i className="fa fa-info-circle fa-fw"></i></button>}
           {if @props.subject? and @props.user? and @props.project?
