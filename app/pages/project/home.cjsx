@@ -12,6 +12,9 @@ module.exports = React.createClass
 
   mixins: [HandlePropChanges, PromiseToSetState]
 
+  contextTypes:
+    geordi: React.PropTypes.object
+
   propChangeHandlers:
     project: (project) ->
       # TODO: Build this kind of caching into json-api-client.
@@ -31,6 +34,10 @@ module.exports = React.createClass
   handleWorkflowSelection: (workflow) ->
     @props.onChangePreferences 'preferences.selected_workflow', workflow?.id
     undefined # Don't prevent default Link behavior.
+
+  render: ->
+    logClick = @context.geordi?.makeHandler? 'get-started'
+    [owner, name] = @props.project.slug.split('/')
 
   render: ->
     <div className="project-home-page">
