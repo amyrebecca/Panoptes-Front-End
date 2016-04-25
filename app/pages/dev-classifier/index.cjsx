@@ -51,9 +51,17 @@ ClassificationViewer = React.createClass
 DevClassifierPage = React.createClass
   getDefaultProps: ->
     classification: mockData.classification
+    project: mockData.project
+
+  componentDidMount: ->
+    document.body.style.backgroundColor = '#444'
+    document.body.style.color = 'white'
+
+  componentWillUnmount: ->
+    document.body.style.backgroundColor = ''
+    document.body.style.color = ''
 
   reload: ->
-    debugger
     workflow = @props.classification._workflow
     firstTask = workflow.tasks[workflow.first_task]
     FirstTaskComponent = tasks[firstTask.type]
@@ -64,7 +72,7 @@ DevClassifierPage = React.createClass
 
   render: ->
     <div className="content-container">
-      <Classifier classification={@props.classification} onClickNext={@reload} />
+      <Classifier project={@props.project} classification={@props.classification} onClickNext={@reload} />
       <hr />
       <ClassificationViewer classification={@props.classification} />
     </div>

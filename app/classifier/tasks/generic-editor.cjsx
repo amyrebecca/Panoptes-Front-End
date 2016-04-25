@@ -26,6 +26,9 @@ module.exports = React.createClass
       when 'crop' then ['instruction']
       when 'text' then ['instruction']
 
+    isAQuestion = @props.task.type in ['single', 'multiple']
+    canBeRequired = @props.task.type in ['single', 'multiple', 'text']
+
     <div className="workflow-task-editor #{@props.task.type}">
       <div>
         <AutoSave resource={@props.workflow}>
@@ -50,29 +53,43 @@ module.exports = React.createClass
       {if choicesKey?
         <div>
           <hr />
-
           <span className="form-label">Choices</span>
-        </div>
-      }
-      {' '} 
-      {if choicesKey is 'answers'
-        multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
-        requiredHelp = 'Check this box if this question has to be answered before proceeding. If a marking task is Required, the volunteer will not be able to move on until they have made at least 1 mark.'
+        </div>}
+      {' '}
 
-        [<label key="multiple" className="pill-button">
+      {if @props.project and 'hide previous marks' in @props.project.experimental_tools
+        <label className="pill-button">
           <AutoSave resource={@props.workflow}>
-            <input type="checkbox" checked={@props.task.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
-            Allow multiple
+            <input type="checkbox" checked={@props.task.enableHidePrevMarks} onChange={@toggleHidePrevMarksEnabled} />{' '}
+            Allow hiding marks
           </AutoSave>
-        </label>
-        ' '
-        <label key="required" className="pill-button" title={requiredHelp}>
-          <AutoSave resource={@props.workflow}>
-            <input type="checkbox" name="#{@props.taskPrefix}.required" checked={@props.task.required} onChange={handleChange} />{' '}
-            Required
-          </AutoSave>
-        </label>]}
-        <br />
+        </label>}
+
+      {if isAQuestion
+        multipleHelp = 'Multiple Choice: Check this box if more than one answer can be selected.'
+
+        <span>
+          <label className="pill-button">
+            <AutoSave resource={@props.workflow}>
+              <input type="checkbox" checked={@props.task.type is 'multiple'} onChange={@toggleMultipleChoice} />{' '}
+              Allow multiple
+            </AutoSave>
+          </label>
+          {' '}
+        </span>}
+
+      {if canBeRequired
+        requiredHelp = 'Check this box if this question has to be answered before proceeding. If a marking task is Required, the volunteer will not be able to move on until they have made at least 1 mark.'
+        <span>
+          <label className="pill-button" title={requiredHelp}>
+            <AutoSave resource={@props.workflow}>
+              <input type="checkbox" name="#{@props.taskPrefix}.required" checked={@props.task.required} onChange={handleChange} />{' '}
+              Required
+            </AutoSave>
+          </label>
+          {' '}
+        </span>}
+      <br />
 
       {if choicesKey?
         <div className="workflow-task-editor-choices">
@@ -101,8 +118,12 @@ module.exports = React.createClass
                       <AutoSave resource={@props.workflow}>
                         Type{' '}
                         <select name="#{@props.taskPrefix}.#{choicesKey}.#{index}.type" value={choice.type} onChange={handleChange}>
-                          {for toolKey of drawingTools
-                            <option key={toolKey} value={toolKey}>{toolKey}</option>}
+                          {if @canUse("column")
+                            for toolKey of drawingTools
+                              <option key={toolKey} value={toolKey}>{toolKey}</option>
+                          else
+                            for toolKey of drawingTools 
+                              <option key={toolKey} value={toolKey}>{toolKey}</option> unless toolKey is "column"}
                         </select>
                       </AutoSave>
                     </div>
@@ -180,6 +201,8 @@ module.exports = React.createClass
                 <small className="form-help">*rectangle:* a box of any size and length-width ratio; this tool *cannot* be rotated.</small><br />
                 <small className="form-help">*circle:* a point and a radius.</small><br />
                 <small className="form-help">*ellipse:* an oval of any size and axis ratio; this tool *can* be rotated.</small><br />
+                {if @canUse("column")
+                  <small className="form-help">*column rectangle:* a box with full height but variable width; this tool *cannot* be rotated.</small>}
               </div>}
         </div>}
 
@@ -191,6 +214,14 @@ module.exports = React.createClass
           </AutoSave>
         </div>}
     </div>
+
+  canUse: (tool) ->
+    tool in @props.project.experimental_tools
+
+  toggleHidePrevMarksEnabled: (e) ->
+    enableHidePrevMarks = e.target.checked
+    @props.task.enableHidePrevMarks = enableHidePrevMarks
+    @props.workflow.update 'tasks'
 
   toggleMultipleChoice: (e) ->
     newType = if e.target.checked

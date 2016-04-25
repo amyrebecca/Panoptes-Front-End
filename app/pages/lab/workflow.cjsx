@@ -13,6 +13,8 @@ tasks = require '../../classifier/tasks'
 AutoSave = require '../../components/auto-save'
 FileButton = require '../../components/file-button'
 GoldStandardImporter = require './gold-standard-importer'
+WorkflowCreateForm = require './workflow-create-form'
+workflowActions = require './actions/workflow'
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats
@@ -41,6 +43,7 @@ EditWorkflowPage = React.createClass
 
   getDefaultProps: ->
     workflow: null
+    workflowActions: workflowActions
 
   getInitialState: ->
     selectedTaskKey: @props.workflow.first_task
@@ -48,14 +51,33 @@ EditWorkflowPage = React.createClass
     forceReloader: 0
     deletionInProgress: false
     deletionError: null
+    workflowCreationInProgress: false
 
   workflowLink: ->
     [owner, name] = @props.project.slug.split('/')
     viewQuery = workflow: @props.workflow.id, reload: @state.forceReloader
     @history.createHref("/projects/#{owner}/#{name}/classify", viewQuery)
 
+  showCreateWorkflow: ->
+    @setState workflowCreationInProgress: true
+
+  hideCreateWorkflow: ->
+    @setState workflowCreationInProgress: false
+
+  handleWorkflowCreation: (workflow) ->
+    @hideCreateWorkflow()
+    newLocation = Object.assign {}, @props.location, pathname: "/lab/#{@props.project.id}/workflow/#{workflow.id}"
+    @props.history.push newLocation
+    @props.project.uncacheLink 'workflows'
+    @props.project.uncacheLink 'subject_sets' # An "expert" subject set is automatically created with each workflow.
+
   canUseTask: (project, task)->
     task in project.experimental_tools
+
+  handleTaskChange: (taskKey, taskDescription) ->
+    changes = {}
+    changes["tasks.#{taskKey}"] = taskDescription
+    @props.workflow.update(changes).save()
 
   render: ->
     window.editingWorkflow = @props.workflow
@@ -65,7 +87,15 @@ EditWorkflowPage = React.createClass
       pointerEvents: 'none'
 
     <div className="edit-workflow-page">
-      <h3>{@props.workflow.display_name} #{@props.workflow.id}</h3>
+      <h3>{@props.workflow.display_name} #{@props.workflow.id}{' '}
+        <button onClick={@showCreateWorkflow} disabled={@props.project.live or @state.workflowCreationInProgress} title="Copy workflow">
+          <i className="fa fa-copy"/>
+        </button>
+      </h3>
+      {if @state.workflowCreationInProgress
+        <ModalFormDialog tag="div">
+          <WorkflowCreateForm onSubmit={@props.workflowActions.createWorkflowForProject} onCancel={@hideCreateWorkflow} onSuccess={@handleWorkflowCreation}  projectID={@props.project.id} workflowToClone={@props.workflow} />
+        </ModalFormDialog>}
       <p className="form-help">A workflow is the sequence of tasks that you’re asking volunteers to perform. For example, you might want to ask volunteers to answer questions about your images, or to mark features in your images, or both.</p>
       {if @props.project.live
         <p className="form-help warning"><strong>You cannot edit a project’s workflows once it’s gone live.</strong></p>}
@@ -98,7 +128,9 @@ EditWorkflowPage = React.createClass
                         when 'survey' then <i className="fa fa-binoculars fa-fw"></i>
                         when 'flexibleSurvey' then <i className="fa fa-binoculars fa-fw"></i>
                         when 'crop' then <i className="fa fa-crop fa-fw"></i>
-                        when 'text' then <i className="fa fa-file-text-o fa-fw"></i>}
+                        when 'text' then <i className="fa fa-file-text-o fa-fw"></i>
+                        when 'dropdown' then <i className="fa fa-list fa-fw"></i>
+                        when 'combo' then <i className="fa fa-cubes fa-fw"></i>}
                       {' '}
                       {tasks[definition.type].getTaskText definition}
                       {if key is @props.workflow.first_task
@@ -144,14 +176,6 @@ EditWorkflowPage = React.createClass
                         <small><strong>Survey</strong></small>
                       </button>
                     </AutoSave>}{' '}
-                  {if @canUseTask(@props.project, "flexible-survey")
-                    <AutoSave resource={@props.workflow}>
-                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'flexibleSurvey'} title="Flexible Survey tasks: the volunteer identifies objects (usually animals) in the image(s) by filtering by their visible charactaristics, then answers questions about them. The questions may vary based on the object they identify.">
-                        <i className="fa fa-binoculars fa-2x"></i>
-                        <br />
-                        <small><strong>Flex Survey</strong></small>
-                      </button>
-                    </AutoSave>}{' '}
                   {if @canUseTask(@props.project, "crop")
                     <AutoSave resource={@props.workflow}>
                       <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'crop'} title="Crop tasks: the volunteer draws a rectangle around an area of interest, and the view of the subject is approximately cropped to that area.">
@@ -160,6 +184,22 @@ EditWorkflowPage = React.createClass
                         <small><strong>Crop</strong></small>
                       </button>
                     </AutoSave>}{' '}
+                  {if @canUseTask(@props.project, "dropdown")
+                      <AutoSave resource={@props.workflow}>
+                        <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'dropdown'} title="Dropdown tasks: the volunteer selects an option from a list. Conditional dropdowns can be created, and if a research team enables the feature, a volunteer can enter text if the answer they'd like to provide is not an option available.">
+                          <i className="fa fa-list fa-2x"></i>
+                          <br />
+                          <small><strong>Dropdown</strong></small>
+                        </button>
+                      </AutoSave>}{' '}
+                  {if @canUseTask(@props.project, "combo")
+                    <AutoSave resource={@props.workflow}>
+                      <button type="submit" className="minor-button" onClick={@addNewTask.bind this, 'combo'} title="Combo tasks: show a bunch of tasks at the same time.">
+                        <i className="fa fa-cubes fa-2x"></i>
+                        <br />
+                        <small><strong>Combo</strong></small>
+                      </button>
+                    </AutoSave>}
                 </TriggeredModalForm>
               </p>
 
@@ -278,6 +318,7 @@ EditWorkflowPage = React.createClass
                 task={@props.workflow.tasks[@state.selectedTaskKey]}
                 taskPrefix="tasks.#{@state.selectedTaskKey}"
                 project={@props.project}
+                onChange={@handleTaskChange.bind this, @state.selectedTaskKey}
               />
               <hr />
               <br />
@@ -305,8 +346,8 @@ EditWorkflowPage = React.createClass
 
   renderSubjectSets: ->
     projectAndWorkflowSubjectSets = Promise.all [
-      @props.project.get 'subject_sets'
-      @props.workflow.get 'subject_sets'
+      @props.project.get 'subject_sets', sort: 'display_name', page_size: 100
+      @props.workflow.get 'subject_sets', sort: 'display_name', page_size: 100
     ]
 
     <PromiseRenderer promise={projectAndWorkflowSubjectSets}>{([projectSubjectSets, workflowSubjectSets]) =>
@@ -386,11 +427,6 @@ EditWorkflowPage = React.createClass
       .then =>
         if @isMounted()
           @setState deletionInProgress: false
-
-  handleTaskChange: (taskKey, path, value) ->
-    changes = {}
-    changes["tasks.#{taskKey}.#{path}"] = value
-    @props.workflow.update changes
 
   handleGoldStandardDataImport: (e) ->
     @setState goldStandardFilesToImport: e.target.files

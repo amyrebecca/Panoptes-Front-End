@@ -11,6 +11,8 @@ TagSearch = require '../../components/tag-search'
 {MarkdownEditor} = require 'markdownz'
 MarkdownHelp = require '../../partials/markdown-help'
 alert = require('../../lib/alert')
+{DISCIPLINES} = require '../../components/disciplines'
+Select = require 'react-select'
 
 MAX_AVATAR_SIZE = 64000
 MAX_BACKGROUND_SIZE = 256000
@@ -73,8 +75,21 @@ module.exports = React.createClass
     project: {}
 
   getInitialState: ->
+    {disciplineTagList, otherTagList} = @splitTags()
     avatarError: null
     backgroundError: null
+    disciplineTagList: disciplineTagList
+    otherTagList: otherTagList
+
+  splitTags: (kind) ->
+    disciplineTagList = []
+    otherTagList = []
+    for t in @props.project.tags
+      if DISCIPLINES.some((el) -> el.value == t)
+        disciplineTagList.push(t)
+      else
+        otherTagList.push(t)
+    {disciplineTagList, otherTagList}
 
   render: ->
     # Failures on media GETs are acceptable here,
@@ -158,11 +173,34 @@ module.exports = React.createClass
             <small className="form-help">Add text here when you have multiple workflows and want to help your volunteers decide which one they should do.</small>
           </p>
 
+          <p>
+            <AutoSave resource={@props.project}>
+              <span className="form-label">Announcement Banner</span>
+              <br />
+              <textarea className="standard-input full" name="configuration.announcement" value={@props.project.configuration?.announcement} onChange={handleInputChange.bind @props.project} />
+            </AutoSave>
+            <small className="form-help">This text will appear as a banner at the top of all your project's pages. Only use this when you've got a big important announcement to make!</small>
+          </p>
+
           <div>
             <AutoSave resource={@props.project}>
-              <span className="form-label">Tags</span>
+            <span className="form-label">Discipline Tag</span>
+            <br />
+            <Select
+              ref="disciplineSelect"
+              name="disciplines"
+              placeholder="Add Discipline Tag"
+              className="discipline-tag"
+              value={@state.disciplineTagList}
+              options={DISCIPLINES}
+              multi={true}
+              onChange={@handleDisciplineTagChange} />
               <br />
-              <TagSearch name="tags" multi={true} value={@props.project.tags} onChange={@handleTagChange} />
+              </AutoSave>
+              <AutoSave resource={@props.project}>
+              <span className="form-label">Other Tags</span>
+              <br />
+              <TagSearch name="tags" multi={true} value={@state.otherTagList} onChange={@handleOtherTagChange} />
             </AutoSave>
             <small className="form-help">Enter a list of tags separated by commas to help users find your project.</small>
           </div>
@@ -176,10 +214,22 @@ module.exports = React.createClass
       </div>
     </div>
 
+  handleDisciplineTagChange: (value) ->
+    newTags = if value is '' then [] else value.split(',')
+    @setState disciplineTagList: newTags
+    allTags = newTags.concat @state.otherTagList
+    @handleTagChange(allTags)
+
+  handleOtherTagChange: (value) ->
+    newTags = if value is '' then [] else value.split(',')
+    @setState otherTagList: newTags
+    allTags = @state.disciplineTagList.concat newTags
+    @handleTagChange(allTags)
+
   handleTagChange: (value) ->
     event =
       target:
-        value: if value is '' then [] else value.split(',')
+        value: value
         name: 'tags'
         dataset: {}
     handleInputChange.call @props.project, event
@@ -193,7 +243,7 @@ module.exports = React.createClass
 
     apiClient.post @props.project._getURL(type), media: content_type: file.type
       .then ([resource]) =>
-        putFile resource.src, file
+        putFile resource.src, file, {'Content-Type': file.type}
       .then =>
         @props.project.uncacheLink type
         @["#{type}Get"] = null # Uncache the local request so that rerendering makes it again.

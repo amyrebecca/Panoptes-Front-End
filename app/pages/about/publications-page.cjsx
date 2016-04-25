@@ -12,6 +12,7 @@ counterpart.registerTranslations 'en',
       climate: 'Climate'
       humanities: 'Humanities'
       nature: 'Nature'
+      medicine: 'Medicine'
       meta: 'Meta'
     content:
       header:
@@ -146,10 +147,12 @@ publicationCategories =
     },
     {slug: "zooniverse/planet-hunters"
     publications: [
+      {citation: "Planet Hunters X: Searching for Nearby Neighbors of 75 Planet and Eclipsing Binary Candidates from the K2 Kepler extended mission, Schmitt+ 2016."
+      href: "http://arxiv.org/pdf/1603.06945v1.pdf"},
       {citation: "Planet Hunters. VIII. Characterization of 41 Long-Period Exoplanet Candidates from Kepler Archival Data, Wang+ 2015."
       href: "http://arxiv.org/pdf/1512.02559v2.pdf"},
-      {citation: "Planet Hunters. X. KIC 8462852 – Where’s the flux?, Boyajian+ 2015."
-      href: "http://arxiv.org/pdf/1509.03622v1.pdf"},
+      {citation: "Planet Hunters. IX. KIC 8462852 – Where’s the flux?, Boyajian+ 2015."
+      href: "http://mnras.oxfordjournals.org/content/457/4/3988.full.pdf"},
       {citation: "GALEX J194419.33+491257.0: An unusually active SU UMa-type dwarf nova with a very short orbital period in the Kepler data, Kato & Osaki 2014."
       href: "http://adsabs.harvard.edu/doi/10.1093/pasj/psu025"},
       {citation: "Planet Hunters. VI. An Independent Characterization of KOI-351 and Several Long Period Planet Candidates from the Kepler Archival Data, Schmitt+ 2014."
@@ -171,6 +174,8 @@ publicationCategories =
     },
     {slug: "zooniverse/milky-way-project"
     publications: [
+      {citation: "The Milky Way Project and ATLASGAL: The distribution and physical properties of cold clumps near infrared bubbles, Kendrew+ 2016."
+      href: "http://arxiv.org/abs/1602.06982"},
       {citation: "The Milky Way Project: What are Yellowballs?, Kerton+ 2015."
       href: "http://arxiv.org/abs/1502.01388v1"},
       {citation: "The Milky Way Project: Leveraging Citizen Science and Machine Learning to Detect Interstellar Bubbles, Beaumont+ 2014."
@@ -213,6 +218,11 @@ publicationCategories =
       {citation: "Radio Galaxy Zoo: host galaxies and radio morphologies derived from visual inspection, Banfield+ 2015."
       href: "http://arXiv.org/abs/1507.07272"}]
     }
+    {slug: "zooniverse/moon-zoo"
+    publications: [
+      {citation: "The Moon Zoo citizen science project: Preliminary results for the Apollo 17 landing site, Bugiolacchi+ 2016."
+      href: "http://arxiv.org/pdf/1602.01664v1.pdf"}]
+    }
   ],
   climate: [
     {slug: "zooniverse/cyclone-center"
@@ -228,6 +238,11 @@ publicationCategories =
       href: "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?reload=true&tp=&arnumber=7004460&queryText%3Dwilliam+alex+pridemore"},
       {citation: "P.Oxy 5156, Plutarch Moralia 660C, 661B-C (Quaestiones Convivales IV PR., 1.2), in The Oxyrhynchus Papyri Vol. 78, Brusuelas 2013."}
 
+    ]}
+    {slug: "zooniverse/operation-war-diary"
+    publications: [
+      {citation: "A Life in the Trenches? The Use of Operation War Diary and Crowdsourcing Methods to Provide an Understanding of the British Army’s Day-to-Day Life on the Western Front, Grayson+ 2016."
+      href: "http://bjmh.org.uk/index.php/bjmh/article/view/96"}
     ]}
   ],
   nature: [
@@ -251,6 +266,13 @@ publicationCategories =
   #   ],
   # physics: [
   #   ],
+  medicine: [
+    {slug: "zooniverse/cell-slider"
+    publications: [
+      {citation: "Crowdsourcing the General Public for Large Scale Molecular Pathology Studies in Cancer, Candido dos Reis+ 2015."
+      href: "http://www.ebiomedicine.com/article/S2352-3964(15)30016-5/pdf"}]
+    },
+  ],
   meta: [
     {name: "Meta Studies"
     publications: [
