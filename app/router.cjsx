@@ -201,6 +201,7 @@ module.exports =
       <Route path="data-exports" component={require './pages/lab/data-dumps'} />
       <Route path="tutorial" component={require './pages/lab/tutorial'} />
       <Route path="guide" component={require './pages/lab/field-guide'} />
+
       <Redirect from="workflow/*" to="workflows/*" />
       <Route path="workflows" component={WorkflowsContainer}>
         <IndexRoute component={WorkflowsList} />
@@ -208,6 +209,11 @@ module.exports =
         <Route path=":workflowID/visualize" component={require './pages/lab/workflows/workflow-viewer'} />
         <Route path=":workflowID/visualise" component={require './pages/lab/workflows/workflow-viewer'} />
       </Route>
+
+      <Route path="retirement" component={ (require './pages/lab/retirement-rules-container').default }>
+        <IndexRoute component={(require './pages/lab/retirement-rules-page').default} />
+      </Route>
+
       <Redirect from="subject-set/*" to="subject-sets/*" />
       <Route path="subject-sets" component={SubjectSetsContainer}>
         <IndexRoute component={SubjectSetsList} />
