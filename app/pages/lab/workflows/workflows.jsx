@@ -6,18 +6,16 @@ import WorkflowCreateForm from './workflow-create-form';
 import LoadingIndicator from '../../../components/loading-indicator';
 
 const WorkflowsPage = (props) => {
-  const renderWorkflow = ((workflow) => {
-    return (
-      <li key={workflow.id}>
-        <Link key={workflow.id} to={props.labPath(`/workflows/${workflow.id}`)} className="nav-list-item" activeClassName="active">
-          {workflow.display_name}
-          {(props.project.configuration && workflow.id === props.project.configuration.default_workflow) && (
-            <span title="Default workflow">{' '}*{' '}</span>
-          )}
-        </Link>
-      </li>
-    );
-  });
+  const renderWorkflow = (workflow =>
+    <li key={workflow.id}>
+      <Link key={workflow.id} to={props.labPath(`/workflows/${workflow.id}`)} className="nav-list-item" activeClassName="active">
+        {workflow.display_name}
+        {(props.project.configuration && workflow.id === props.project.configuration.default_workflow) && (
+          <span title="Default workflow">{' '}*{' '}</span>
+        )}
+      </Link>
+    </li>
+  );
 
   return (
     <div>
@@ -25,7 +23,7 @@ const WorkflowsPage = (props) => {
 
       <p>A workflow is the sequence of tasks that you’re asking volunteers to perform.</p>
       <p> An asterisk (*) denotes a default workflow. </p>
-      <p> If you have multiple workflows you can rearrange the order in which they are listed on your project's front page by clicking and dragging on the left gray tab next to each workflow title listed below. </p>
+      <p> If you have multiple workflows you can rearrange the order in which they are listed on your project&apos;s front page by clicking and dragging on the left gray tab next to each workflow title listed below. </p>
 
       <DragReorderable tag="ul" className="nav-list" items={props.workflows} render={renderWorkflow} onChange={props.handleWorkflowReorder} />
 
@@ -72,7 +70,7 @@ WorkflowsPage.propTypes = {
   hideCreateWorkflow: React.PropTypes.func,
   handleWorkflowCreation: React.PropTypes.func,
   handleWorkflowReorder: React.PropTypes.func,
-  labPath: React.PropTypes.func,
+  labPath: React.PropTypes.func, // eslint-disable-line react/no-unused-prop-types
   loading: React.PropTypes.bool,
   project: React.PropTypes.shape({
     configuration: React.PropTypes.object,

@@ -11,7 +11,8 @@ class ExportWorkflowsDialog extends React.Component {
       workflows: [],
       media: {},
       selectedWorkflowId: null,
-      workflowError: {}
+      workflowError: {},
+      workflowSelected: false
     };
 
     this.requestDataExport = this.requestDataExport.bind(this);

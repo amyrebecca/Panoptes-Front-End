@@ -41,9 +41,8 @@ export default class WorkflowsContainer extends React.Component {
   }
 
   handleWorkflowReorder(newOrder) {
-    const newOrderIDs = newOrder.map((workflow) => {
-      return workflow.id;
-    });
+    const newOrderIDs = newOrder.map(workflow => workflow.id);
+
     this.props.project.update({
       'configuration.workflow_order': newOrderIDs
     });
