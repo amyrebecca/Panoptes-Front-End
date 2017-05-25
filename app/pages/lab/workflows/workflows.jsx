@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import DragReorderable from 'drag-reorderable';
 import ModalFormDialog from 'modal-form/dialog';
 import WorkflowCreateForm from './workflow-create-form';
-import LoadingIndicator from '../../components/loading-indicator';
+import LoadingIndicator from '../../../components/loading-indicator';
 
 const WorkflowsPage = (props) => {
   const renderWorkflow = ((workflow) => {

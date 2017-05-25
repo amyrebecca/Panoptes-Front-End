@@ -17,9 +17,9 @@ React = require 'react'
 `import UserProfilePage from './pages/profile/index';`
 `import NotificationsPage from './pages/notifications';`
 `import SubjectPageController from './subjects';`
-`import WorkflowsPage from './pages/lab/workflows';`
-`import WorkflowsContainer from './pages/lab/workflows-container';`
-`import WorkflowsList from './pages/lab/workflows';`
+`import WorkflowsPage from './pages/lab/workflows/workflows';`
+`import WorkflowsContainer from './pages/lab/workflows/workflows-container';`
+`import WorkflowsList from './pages/lab/workflows/workflows';`
 `import SubjectSetsContainer from './pages/lab/subject-sets-container';`
 `import SubjectSetsList from './pages/lab/subject-sets';`
 
@@ -204,9 +204,9 @@ module.exports =
       <Redirect from="workflow/*" to="workflows/*" />
       <Route path="workflows" component={WorkflowsContainer}>
         <IndexRoute component={WorkflowsList} />
-        <Route path=":workflowID" component={require './pages/lab/workflow'} />
-        <Route path=":workflowID/visualize" component={require './pages/lab/workflow-viewer'} />
-        <Route path=":workflowID/visualise" component={require './pages/lab/workflow-viewer'} />
+        <Route path=":workflowID" component={require './pages/lab/workflows/workflow'} />
+        <Route path=":workflowID/visualize" component={require './pages/lab/workflows/workflow-viewer'} />
+        <Route path=":workflowID/visualise" component={require './pages/lab/workflows/workflow-viewer'} />
       </Route>
       <Redirect from="subject-set/*" to="subject-sets/*" />
       <Route path="subject-sets" component={SubjectSetsContainer}>

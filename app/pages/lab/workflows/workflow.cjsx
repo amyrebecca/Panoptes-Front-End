@@ -1,22 +1,22 @@
 React = require 'react'
-handleInputChange = require '../../lib/handle-input-change'
-PromiseRenderer = require '../../components/promise-renderer'
 TriggeredModalForm = require 'modal-form/triggered'
 ModalFormDialog = require 'modal-form/dialog'
 apiClient = require 'panoptes-client/lib/api-client'
-ChangeListener = require '../../components/change-listener'
-RetirementRulesEditor = require '../../components/retirement-rules-editor'
 {Link} = require 'react-router'
-MultiImageSubjectOptionsEditor = require '../../components/multi-image-subject-options-editor'
-tasks = require('../../classifier/tasks').default
-AutoSave = require '../../components/auto-save'
-FileButton = require '../../components/file-button'
+handleInputChange = require '../../../lib/handle-input-change'
+PromiseRenderer = require '../../../components/promise-renderer'
+ChangeListener = require '../../../components/change-listener'
+RetirementRulesEditor = require '../../../components/retirement-rules-editor'
+MultiImageSubjectOptionsEditor = require '../../../components/multi-image-subject-options-editor'
+tasks = require('../../../classifier/tasks').default
+AutoSave = require '../../../components/auto-save'
+FileButton = require '../../../components/file-button'
 WorkflowCreateForm = require './workflow-create-form'
-workflowActions = require './actions/workflow'
+workflowActions = require '../actions/workflow'
 classnames = require 'classnames'
 
-`import ShortcutEditor from '../../classifier/tasks/shortcut-editor';`
-`import FeedbackEditor from './feedback/feedback-editor';`
+`import ShortcutEditor from '../../../classifier/tasks/shortcut-editor';`
+`import FeedbackEditor from '../feedback/feedback-editor';`
 
 DEMO_SUBJECT_SET_ID = if process.env.NODE_ENV is 'production'
   '6' # Cats

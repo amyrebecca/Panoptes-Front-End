@@ -1,5 +1,5 @@
 import React from 'react';
-import getWorkflowsInOrder from '../../lib/get-workflows-in-order';
+import getWorkflowsInOrder from '../../../lib/get-workflows-in-order';
 
 export default class WorkflowsContainer extends React.Component {
   constructor(props) {

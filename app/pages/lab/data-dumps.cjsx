@@ -2,7 +2,7 @@ React = require 'react'
 counterpart = require 'counterpart'
 DataExportButton = require '../../partials/data-export-button'
 TalkDataExportButton = require '../../talk/data-export-button'
-`import WorkflowClassificationExportButton from './workflow-classification-export-button';`
+`import WorkflowClassificationExportButton from './workflows/workflow-classification-export-button';`
 Dialog = require 'modal-form/dialog'
 
 counterpart.registerTranslations 'en',

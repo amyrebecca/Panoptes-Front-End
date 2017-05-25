@@ -1,5 +1,5 @@
 React = require 'react'
-icons = require '../../../classifier/tasks/drawing/icons'
+icons = require '../../../../classifier/tasks/drawing/icons'
 {Markdown} = require 'markdownz'
 
 # Styling for ansers within a list

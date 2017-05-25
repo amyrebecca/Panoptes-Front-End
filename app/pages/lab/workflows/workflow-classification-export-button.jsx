@@ -33,6 +33,7 @@ class WorkflowClassificationExportButton extends React.Component {
   render() {
     return (
       <div>
+        <i className="fa fa-cog fa-lg fa-fw" />
         <button onClick={this.showWorkflowExport}>Request new workflow classification export</button>
         <small className="form-help"> CSV format.</small>
         { this.state.exportRequested ? <div className="form-help success">We’ve received your request, check your email for a link to your data soon!</div> : null }

@@ -1,7 +1,7 @@
 import React from 'react';
 import Moment from 'moment';
 import apiClient from 'panoptes-client/lib/api-client';
-import getWorkflowsInOrder from '../../lib/get-workflows-in-order';
+import getWorkflowsInOrder from '../../../lib/get-workflows-in-order';
 
 class ExportWorkflowsDialog extends React.Component {
   constructor(props) {
