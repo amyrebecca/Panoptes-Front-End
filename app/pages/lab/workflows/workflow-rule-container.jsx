@@ -39,7 +39,7 @@ class WorkflowRuleContainer extends React.Component {
 }
 
 WorkflowRuleContainer.propTypes = {
-  workflow: React.PropTypes.shape({ save: React.PropTypes.func }).isRequired,
+  workflow: React.PropTypes.shape({ save: React.PropTypes.func }),
   rule: React.PropTypes.shape({}).isRequired, // TODO: fill this out
   disabled: React.PropTypes.bool.isRequired
 };

@@ -27,7 +27,7 @@ class RetirementRulesContainer extends React.Component {
   }
 
   fetchWorkflows(project) {
-    getWorkflowsInOrder(project, { fields: 'display_name' }).then((workflows) => {
+    getWorkflowsInOrder(project, { fields: ['display_name', 'retirement'] }).then((workflows) => {
       this.setState({ workflows, loading: false });
     });
   }
