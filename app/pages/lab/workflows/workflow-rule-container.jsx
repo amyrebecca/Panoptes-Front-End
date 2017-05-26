@@ -19,8 +19,10 @@ class WorkflowRuleContainer extends React.Component {
   }
 
   onSaveRule() {
-    this.props.workflow.save();
-    return this;
+    this.props.workflow.save().then(() => this.setState({ editing: false }));
+
+    // TODO: remove this
+    this.setState({ editing: false });
   }
 
   editRule() {
@@ -30,15 +32,15 @@ class WorkflowRuleContainer extends React.Component {
   render() {
     /* eslint-disable multiline-ternary */
     return this.state.editing ?
-      <EditRule rule={this.props.rule} onCancelEdit={this.onCancelEdit} onSave={this.onSaveRule} /> :
+      <EditRule rule={this.props.rule} onCancel={this.onCancelEdit} onSave={this.onSaveRule} /> :
       <ShowRule rule={this.props.rule} onEdit={this.editRule} />;
     /* eslint-enable */
   }
 }
 
 WorkflowRuleContainer.propTypes = {
-  workflow: React.PropTypes.shape({ save: React.PropTypes.func }),
-  rule: React.PropTypes.shape({})
+  // workflow: React.PropTypes.shape({ save: React.PropTypes.func }),
+  // rule: React.PropTypes.shape({})
 };
 
 export default WorkflowRuleContainer;
