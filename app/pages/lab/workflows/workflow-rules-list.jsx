@@ -12,7 +12,7 @@ const WorkflowRulesList = ({ rules, workflow }) => {
 
   return (
     <div className="workflow-rules-list">
-      <h3 className="form-label">Retirement Rules</h3>
+      <h3 className="form-label">Configure Rules</h3>
       <input type="checkbox" className="workflow-rule-list__rule-enable" disabled="true" checked="true" /><p><small><strong>Basic Subject Retirement</strong></small></p>
       <p className="workflow-rule-list__rule-description"><small>Use this option to set one retirement rule for every subject.</small></p>
       <p className="workflow-rule-list__rule-option">
