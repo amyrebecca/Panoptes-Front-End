@@ -1,9 +1,14 @@
 .workflow-rules-list
   .workflow-rule-list__rule-enable
     float: left
-    margin-top: 2em
     margin-right: 0.5em
+    margin-top: 0.7em
+    &:first-of-type
+      margin-top: 2em
   .workflow-rule-list__rule-description
     text-indent: 1.5em
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
   .workflow-rule-list__rule-option
     text-indent: 1.5em
