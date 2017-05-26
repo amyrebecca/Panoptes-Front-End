@@ -5,17 +5,18 @@ class EditRule extends React.Component {
     return (
       <div>
         <p>editing a rule ({this.props.rule.foo})</p>
-        <button onClick={this.props.onCancel}>Cancel</button>
-        <button onClick={this.props.onSave}>Save</button>
+        <button onClick={this.props.onCancel} disabled={this.props.disabled}>Cancel</button>
+        <button onClick={this.props.onSave} disabled={this.props.disabled}>Save</button>
       </div>
     );
   }
 }
 
 EditRule.propTypes = {
-  // rule: React.PropTypes.shape({ foo: React.PropTypes.string }).isRequired,
-  // onCancel: React.PropTypes.func.isRequired,
-  // onSave: React.PropTypes.func.isRequired
+  rule: React.PropTypes.shape({ foo: React.PropTypes.string }).isRequired,
+  onCancel: React.PropTypes.func.isRequired,
+  onSave: React.PropTypes.func.isRequired,
+  disabled: React.PropTypes.bool.isRequired
 };
 
 export default EditRule;

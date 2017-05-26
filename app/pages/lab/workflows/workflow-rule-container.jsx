@@ -32,15 +32,20 @@ class WorkflowRuleContainer extends React.Component {
   render() {
     /* eslint-disable multiline-ternary */
     return this.state.editing ?
-      <EditRule rule={this.props.rule} onCancel={this.onCancelEdit} onSave={this.onSaveRule} /> :
-      <ShowRule rule={this.props.rule} onEdit={this.editRule} />;
+      <EditRule rule={this.props.rule} onCancel={this.onCancelEdit} onSave={this.onSaveRule} disabled={this.props.disabled} /> :
+      <ShowRule rule={this.props.rule} onEdit={this.editRule} disabled={this.props.disabled} />;
     /* eslint-enable */
   }
 }
 
 WorkflowRuleContainer.propTypes = {
-  // workflow: React.PropTypes.shape({ save: React.PropTypes.func }),
-  // rule: React.PropTypes.shape({})
+  workflow: React.PropTypes.shape({ save: React.PropTypes.func }).isRequired,
+  rule: React.PropTypes.shape({}).isRequired, // TODO: fill this out
+  disabled: React.PropTypes.bool.isRequired
+};
+
+WorkflowRuleContainer.defaultProps = {
+  disabled: false
 };
 
 export default WorkflowRuleContainer;

@@ -40,6 +40,7 @@ class RetirementRulesContainer extends React.Component {
     return React.cloneElement(this.props.children, {
       rules: this.state.rules,
       workflows: this.state.workflows,
+      selectedWorkflow: this.state.selectedWorkflow,
       onSelectWorkflow: this.selectWorkflow
     });
   }
