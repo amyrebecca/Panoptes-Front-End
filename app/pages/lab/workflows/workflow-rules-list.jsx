@@ -22,10 +22,6 @@ const WorkflowRulesList = ({ rules, workflow }) => {
       <hr />
       <input type="checkbox" className="workflow-rule-list__rule-enable" disabled={!workflow} checked={false} /><p><small><strong>Custom Subject Retirement</strong></small></p>
       <p className="workflow-rule-list__rule-description"><small>Use this option to remove some subjects before others; e.g. retire blank images quicker than images in which users say they see something</small></p>
-      <p className="workflow-rule-list__rule-option">
-        <span className="form-label">Classification Type</span>&nbsp;
-        <input type="text" value={`blah`} disabled={!workflow} onChange={noOp} />
-      </p>
       {(rules && rules.length) ?
         <div>
           {rules.map((rule, idx) => <WorkflowRuleContainer rule={rule} key={idx} disabled={!workflow} />)}

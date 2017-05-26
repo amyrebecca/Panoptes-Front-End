@@ -1,6 +1,6 @@
 import React from 'react';
-import WorkflowRulesList from './workflows/workflow-rules-list';
 import WorkflowsList from './workflows/workflows-list';
+import WorkflowRulesList from './workflows/workflow-rules-list';
 
 const RetirementRulesPage = ({ rules, workflows, selectedWorkflow, onSelectWorkflow }) =>
   <div className="retirement-rules-page">

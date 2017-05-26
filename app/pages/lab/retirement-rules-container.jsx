@@ -6,8 +6,8 @@ class RetirementRulesContainer extends React.Component {
     super(props);
     this.state = {
       rules: [
-        { foo: 'bar' },
-        { foo: 'baz' }
+        { answer: 'HUMAN', count: 2 },
+        { answer: '__ANY__', count: 5 }
       ],
       selectedWorkflow: null,
       workflows: []
