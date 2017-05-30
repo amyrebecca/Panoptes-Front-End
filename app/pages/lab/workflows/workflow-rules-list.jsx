@@ -27,6 +27,11 @@ const WorkflowRulesList = ({ rules, workflow }) => {
           {rules.map((rule, idx) => <WorkflowRuleContainer rule={rule} key={idx} disabled={!workflow} />)}
         </div>
       : <span>no rules</span>}
+      <hr />
+      <input type="checkbox" className="workflow-rule-list__rule-enable" disabled={!workflow} checked={false} /><p><small><strong>Custom JSON Configuration</strong></small></p>
+      <p className="workflow-rule-list__rule-description"><small>If you would like to add even more complex rules, please get in touch via the Contact Us page</small></p>
+      <textarea className="workflow-rule-list__big-input" />
+      <button className="workflow-rule-list__save-custom standard-button">Save Custom</button>
     </div>
   );
 };
