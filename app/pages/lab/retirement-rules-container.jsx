@@ -24,6 +24,7 @@ class RetirementRulesContainer extends React.Component {
 
     this.fetchWorkflows = this.fetchWorkflows.bind(this);
     this.selectWorkflow = this.selectWorkflow.bind(this);
+    this.onSelectFullCustom = this.onSelectFullCustom.bind(this);
   }
 
   componentDidMount() {
@@ -33,6 +34,18 @@ class RetirementRulesContainer extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.project === nextProps.project) return;
     this.fetchWorkflows(nextProps.project);
+  }
+
+  onSelectFullCustom() {
+    const selectedWorkflow = this.state.selectedWorkflow;
+    const config = Object.assign({}, this.state.selectedWorkflow.nero_config);
+    selectedWorkflow.nero_config = config;
+
+    if (selectedWorkflow && selectedWorkflow.nero_config) {
+      selectedWorkflow.nero_config.full_custom = true;
+    }
+
+    this.setState({ rules: null, selectedWorkflow });
   }
 
   fetchWorkflows(project) {
@@ -56,7 +69,8 @@ class RetirementRulesContainer extends React.Component {
       rules: this.state.rules,
       workflows: this.state.workflows,
       selectedWorkflow: this.state.selectedWorkflow,
-      onSelectWorkflow: this.selectWorkflow
+      onSelectWorkflow: this.selectWorkflow,
+      onSelectFullCustom: this.onSelectFullCustom
     });
   }
 }

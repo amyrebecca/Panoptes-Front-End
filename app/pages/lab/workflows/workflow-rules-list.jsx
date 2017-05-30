@@ -3,10 +3,13 @@
 import React from 'react';
 import WorkflowRuleContainer from './workflow-rule-container';
 
-const WorkflowRulesList = ({ rules, workflow }) => {
+const WorkflowRulesList = ({ rules, workflow, onSelectFullCustom }) => {
   const findCount = wf =>
     wf && wf.retirement && wf.retirement.options ?
-          wf.retirement.options.count : 'n/a';
+          wf.retirement.options.count : '';
+
+  const isFullCustom = wf =>
+    wf && wf.nero_config && wf.nero_config.full_custom;
 
   const noOp = () => null;
 
@@ -20,26 +23,27 @@ const WorkflowRulesList = ({ rules, workflow }) => {
         <input type="text" value={findCount(workflow)} disabled={!workflow} onChange={noOp} />
       </p>
       <hr />
-      <input type="radio" name="custom_rule_type" className="workflow-rule-list__rule-enable" disabled={!workflow} checked={true} /><p><small><strong>Custom Subject Retirement</strong></small></p>
+      <input type="radio" name="custom_rule_type" className="workflow-rule-list__rule-enable" disabled={!workflow || isFullCustom(workflow)} checked={!isFullCustom(workflow)} /><p><small><strong>Custom Subject Retirement</strong></small></p>
       <p className="workflow-rule-list__rule-description"><small>Use this option to remove some subjects before others; e.g. retire blank images quicker than images in which users say they see something</small></p>
       {(rules && rules.length) ?
         <div>
           {rules.map((rule, idx) => <WorkflowRuleContainer rule={rule} key={idx} disabled={!workflow} />)}
         </div>
       : <p className="form-label workflow-rule-list__rule-description">&nbsp;&nbsp;No rules have been defined</p>}
-      <button className="workflow-rule-list__button standard-button" disabled={!workflow}>Add Rule</button>
+      <button className="workflow-rule-list__button standard-button" disabled={!workflow || isFullCustom(workflow)}>Add Rule</button>
       <hr />
-      <input type="radio" name="custom_rule_type" className="workflow-rule-list__rule-enable" disabled={!workflow} checked={false} /><p><small><strong>Custom JSON Configuration</strong></small></p>
+      <input type="radio" name="custom_rule_type" className="workflow-rule-list__rule-enable" disabled={!workflow} checked={isFullCustom(workflow)} onClick={onSelectFullCustom} /><p><small><strong>Custom JSON Configuration</strong></small></p>
       <p className="workflow-rule-list__rule-description"><small>If you would like to add even more complex rules, please get in touch via the Contact Us page</small></p>
-      <textarea className="workflow-rule-list__big-input" disabled="true" value={workflow ? JSON.stringify(workflow.nero_config) : ''} />
-      <button className="workflow-rule-list__button standard-button" disabled={!workflow}>Save Custom</button>
+      <textarea className="workflow-rule-list__big-input" disabled={!isFullCustom(workflow)} value={workflow ? JSON.stringify(workflow.nero_config) : ''} />
+      <button className="workflow-rule-list__button standard-button" disabled={!workflow || !isFullCustom(workflow)}>Save Custom</button>
     </div>
   );
 };
 
 WorkflowRulesList.propTypes = {
   rules: React.PropTypes.arrayOf(React.PropTypes.shape({ foo: React.PropTypes.string })),
-  workflow: React.PropTypes.shape({}) // TODO: fill this in
+  workflow: React.PropTypes.shape({}), // TODO: fill this in
+  onSelectFullCustom: React.PropTypes.func
 };
 
 WorkflowRulesList.defaultProps = {
