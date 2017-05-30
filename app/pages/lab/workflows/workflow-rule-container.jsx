@@ -1,40 +1,28 @@
 import React from 'react';
 
-import EditRule from './rules/edit-rule.jsx';
-import ShowRule from './rules/show-rule.jsx';
+import ShowRule from './show-rule.jsx';
 
 class WorkflowRuleContainer extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { editing: false };
+    this.state = { dirty: false };
 
-    this.editRule = this.editRule.bind(this);
-    this.onCancelEdit = this.onCancelEdit.bind(this);
+    this.onChangeRule = this.onChangeRule.bind(this);
     this.onSaveRule = this.onSaveRule.bind(this);
   }
 
-  onCancelEdit() {
-    this.setState({ editing: false });
-  }
-
   onSaveRule() {
-    this.props.workflow.save().then(() => this.setState({ editing: false }));
-
-    // TODO: remove this
-    this.setState({ editing: false });
+    this.props.workflow.save().then(() => this.setState({ dirty: false }));
+    this.setState({ dirty: false });
   }
 
-  editRule() {
-    this.setState({ editing: true });
+  onChangeRule() {
+    this.setState({ dirty: true });
   }
 
   render() {
-    /* eslint-disable multiline-ternary */
-    return this.state.editing ?
-      <EditRule rule={this.props.rule} onCancel={this.onCancelEdit} onSave={this.onSaveRule} disabled={this.props.disabled} /> :
-      <ShowRule rule={this.props.rule} onEdit={this.editRule} disabled={this.props.disabled} />;
-    /* eslint-enable */
+    return <ShowRule rule={this.props.rule} onChangeRule={this.onChangeRule} disabled={this.props.disabled} />;
   }
 }
 

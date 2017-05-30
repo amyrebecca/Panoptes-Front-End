@@ -20,18 +20,19 @@ const WorkflowRulesList = ({ rules, workflow }) => {
         <input type="text" value={findCount(workflow)} disabled={!workflow} onChange={noOp} />
       </p>
       <hr />
-      <input type="checkbox" className="workflow-rule-list__rule-enable" disabled={!workflow} checked={false} /><p><small><strong>Custom Subject Retirement</strong></small></p>
+      <input type="radio" name="custom_rule_type" className="workflow-rule-list__rule-enable" disabled={!workflow} checked={true} /><p><small><strong>Custom Subject Retirement</strong></small></p>
       <p className="workflow-rule-list__rule-description"><small>Use this option to remove some subjects before others; e.g. retire blank images quicker than images in which users say they see something</small></p>
       {(rules && rules.length) ?
         <div>
           {rules.map((rule, idx) => <WorkflowRuleContainer rule={rule} key={idx} disabled={!workflow} />)}
         </div>
-      : <span>no rules</span>}
+      : <p className="form-label workflow-rule-list__rule-description">&nbsp;&nbsp;No rules have been defined</p>}
+      <button className="workflow-rule-list__button standard-button" disabled={!workflow}>Add Rule</button>
       <hr />
-      <input type="checkbox" className="workflow-rule-list__rule-enable" disabled={!workflow} checked={false} /><p><small><strong>Custom JSON Configuration</strong></small></p>
+      <input type="radio" name="custom_rule_type" className="workflow-rule-list__rule-enable" disabled={!workflow} checked={false} /><p><small><strong>Custom JSON Configuration</strong></small></p>
       <p className="workflow-rule-list__rule-description"><small>If you would like to add even more complex rules, please get in touch via the Contact Us page</small></p>
-      <textarea className="workflow-rule-list__big-input" />
-      <button className="workflow-rule-list__save-custom standard-button">Save Custom</button>
+      <textarea className="workflow-rule-list__big-input" disabled="true" value={workflow ? JSON.stringify(workflow.nero_config) : ''} />
+      <button className="workflow-rule-list__button standard-button" disabled={!workflow}>Save Custom</button>
     </div>
   );
 };
@@ -39,6 +40,10 @@ const WorkflowRulesList = ({ rules, workflow }) => {
 WorkflowRulesList.propTypes = {
   rules: React.PropTypes.arrayOf(React.PropTypes.shape({ foo: React.PropTypes.string })),
   workflow: React.PropTypes.shape({}) // TODO: fill this in
+};
+
+WorkflowRulesList.defaultProps = {
+  workflow: {}
 };
 
 export default WorkflowRulesList;

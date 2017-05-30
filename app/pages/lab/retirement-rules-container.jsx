@@ -5,10 +5,19 @@ class RetirementRulesContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rules: [
-        { answer: 'HUMAN', count: 2 },
-        { answer: '__ANY__', count: 5 }
-      ],
+      nero_config: {
+        extractors: { s: { type: 'survey', task_key: 'T0' }},
+        reducers: { s: { type: 'stats' }},
+        rules: [
+          {
+            /* eslint-disable quote-props */
+            'if': ['gte', ['lookup', 's.VHCL', 0], ['const', 1]],
+            'then': [{ action: 'retire_subject', reason: 'flagged' }]
+            /* eslint-enable */
+          }
+        ]
+      },
+      rules: [],
       selectedWorkflow: null,
       workflows: []
     };
@@ -33,7 +42,13 @@ class RetirementRulesContainer extends React.Component {
   }
 
   selectWorkflow(workflow) {
-    this.setState({ selectedWorkflow: workflow });
+    const rules = [
+      { answer: 'HUMAN', count: 2 },
+      { answer: '__ANY__', count: 5 }
+    ];
+
+    workflow.nero_config = this.state.nero_config; // eslint-disable-line no-param-reassign
+    this.setState({ selectedWorkflow: workflow, rules });
   }
 
   render() {
