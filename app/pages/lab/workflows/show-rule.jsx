@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ShowRule = ({ rule }) => {
+const ShowRule = ({ rule, onChangeRule }) => {
   const getOptions = () => [
     { label: '(Any Answer)', value: '__ANY__' },
     { label: '(Nothing Here)', value: '__BLANK__' },
@@ -11,12 +11,21 @@ const ShowRule = ({ rule }) => {
     { label: 'Walrus', value: 'WALRUS' }
   ];
 
+  let select = null;
+  const setSelect = (elem) => { select = elem; };
+
+  let countInput = null;
+  const setCountInput = (elem) => { countInput = elem; };
+
+  const onChange = () =>
+    onChangeRule(countInput.value, select.value);
+
   return (
     <p className="workflow-rule-list__rule-option">
       <span className="form-label">After</span>&nbsp;
-      <input type="text" value={rule.count} style={{ width: '4vw' }} readOnly="true" />
+      <input type="text" value={rule.count} style={{ width: '4vw' }} onChange={onChange} ref={(elem) => { setCountInput(elem); }} />
       <span className="form-label">&nbsp;instances of&nbsp;</span>
-      <select value={rule.answer} readOnly="true">
+      <select value={rule.answer} ref={(elem) => { setSelect(elem); }} onChange={onChange} >
         { getOptions().map(opt =>
           <option key={opt.value} value={opt.value}>{opt.label}</option>
         )}
@@ -27,7 +36,8 @@ const ShowRule = ({ rule }) => {
 };
 
 ShowRule.propTypes = {
-  rule: React.PropTypes.shape({ answer: React.PropTypes.string })
+  rule: React.PropTypes.shape({ answer: React.PropTypes.string }),
+  onChangeRule: React.PropTypes.func
 };
 
 export default ShowRule;

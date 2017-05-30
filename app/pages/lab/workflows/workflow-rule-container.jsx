@@ -6,23 +6,36 @@ class WorkflowRuleContainer extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { dirty: false };
+    this.state = {
+      rule: props.rule,
+      dirty: false
+    };
 
     this.onChangeRule = this.onChangeRule.bind(this);
     this.onSaveRule = this.onSaveRule.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.rule) {
+      this.setState({ rule: nextProps.rule });
+    }
+  }
+
   onSaveRule() {
+    // TODO: somehow ask container to update rule and save config
     this.props.workflow.save().then(() => this.setState({ dirty: false }));
     this.setState({ dirty: false });
   }
 
-  onChangeRule() {
-    this.setState({ dirty: true });
+  onChangeRule(count, answer) {
+    this.setState({
+      dirty: true,
+      rule: { answer, count }
+    });
   }
 
   render() {
-    return <ShowRule rule={this.props.rule} onChangeRule={this.onChangeRule} disabled={this.props.disabled} />;
+    return <ShowRule rule={this.state.rule} onChangeRule={this.onChangeRule} disabled={this.props.disabled} />;
   }
 }
 
