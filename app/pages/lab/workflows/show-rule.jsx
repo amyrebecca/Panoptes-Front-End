@@ -23,7 +23,13 @@ const ShowRule = ({ rule, onChangeRule }) => {
   return (
     <p className="workflow-rule-list__rule-option">
       <span className="form-label">After</span>&nbsp;
-      <input type="text" value={rule.count} style={{ width: '4vw' }} onChange={onChange} ref={(elem) => { setCountInput(elem); }} />
+      <input
+        type="text"
+        value={rule.count}
+        style={{ width: '4vw' }}
+        onChange={onChange}
+        ref={(elem) => { setCountInput(elem); }}
+      />
       <span className="form-label">&nbsp;instances of&nbsp;</span>
       <select value={rule.answer} ref={(elem) => { setSelect(elem); }} onChange={onChange} >
         { getOptions().map(opt =>
