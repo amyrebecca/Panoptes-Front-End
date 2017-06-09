@@ -5,7 +5,7 @@ class RetirementRulesContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      nero_config: {
+      sample_config: {
         extractors: { s: { type: 'survey', task_key: 'T0' }},
         reducers: { s: { type: 'stats' }},
         rules: [
@@ -19,9 +19,13 @@ class RetirementRulesContainer extends React.Component {
       },
       rules: [],
       selectedWorkflow: null,
-      workflows: []
+      workflows: [],
+      basicCount: null
     };
 
+    this.addRule = this.addRule.bind(this);
+    this.deleteRule = this.deleteRule.bind(this);
+    this.saveRule = this.saveRule.bind(this);
     this.fetchWorkflows = this.fetchWorkflows.bind(this);
     this.selectWorkflow = this.selectWorkflow.bind(this);
     this.onSelectFullCustom = this.onSelectFullCustom.bind(this);
@@ -48,6 +52,24 @@ class RetirementRulesContainer extends React.Component {
     this.setState({ rules: null, selectedWorkflow });
   }
 
+  addRule() {
+    const rules = this.state.rules.slice();
+    rules.push({ answer: '', count: '', dirty: true });
+    this.setState({ rules });
+  }
+
+  deleteRule(id) {
+    let rules = this.state.rules.slice();
+    rules = rules.filter((val, idx) => idx !== id);
+    this.setState({ rules });
+  }
+
+  saveRule(id, rule) {
+    const rules = this.state.rules.slice();
+    rules[id] = Object.assign({}, rule, { dirty: false });
+    this.setState({ rules });
+  }
+
   fetchWorkflows(project) {
     getWorkflowsInOrder(project, { fields: ['display_name', 'retirement'] }).then((workflows) => {
       this.setState({ workflows, loading: false });
@@ -55,12 +77,13 @@ class RetirementRulesContainer extends React.Component {
   }
 
   selectWorkflow(workflow) {
-    const rules = [
-      { answer: 'HUMAN', count: 2 },
-      { answer: '__ANY__', count: 5 }
-    ];
+    // const rules = [
+    //   { answer: 'HUMAN', count: 2 },
+    //   { answer: '__ANY__', count: 5 }
+    // ];
+    const rules = [{ answer: 'HUMAN', count: '5' }];
 
-    workflow.nero_config = this.state.nero_config; // eslint-disable-line no-param-reassign
+    // workflow.nero_config = this.state.sample_config; // eslint-disable-line no-param-reassign
     this.setState({ selectedWorkflow: workflow, rules });
   }
 
@@ -69,6 +92,9 @@ class RetirementRulesContainer extends React.Component {
       rules: this.state.rules,
       workflows: this.state.workflows,
       selectedWorkflow: this.state.selectedWorkflow,
+      onAddRule: this.addRule,
+      onDeleteRule: this.deleteRule,
+      onSaveRule: this.saveRule,
       onSelectWorkflow: this.selectWorkflow,
       onSelectFullCustom: this.onSelectFullCustom
     });

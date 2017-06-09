@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ShowRule = ({ rule, onChangeRule }) => {
+const ShowRule = ({ rule, onChangeRule, onDeleteRule, onSaveRule }) => {
   const getOptions = () => [
     { label: '(Any Answer)', value: '__ANY__' },
     { label: '(Nothing Here)', value: '__BLANK__' },
@@ -36,14 +36,17 @@ const ShowRule = ({ rule, onChangeRule }) => {
           <option key={opt.value} value={opt.value}>{opt.label}</option>
         )}
       </select>&nbsp;
-      <button><i className="fa fa-trash-o fa-fw" /></button>
+      {rule.dirty ? <button onClick={onSaveRule}><i className="fa fa-floppy-o fa-fw" /></button> : null }
+      <button onClick={onDeleteRule}><i className="fa fa-trash-o fa-fw" /></button>
     </p>
   );
 };
 
 ShowRule.propTypes = {
   rule: React.PropTypes.shape({ answer: React.PropTypes.string }),
-  onChangeRule: React.PropTypes.func
+  onChangeRule: React.PropTypes.func,
+  onDeleteRule: React.PropTypes.func,
+  onSaveRule: React.PropTypes.func
 };
 
 export default ShowRule;

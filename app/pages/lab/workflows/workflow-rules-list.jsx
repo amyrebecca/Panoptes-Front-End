@@ -3,15 +3,21 @@
 import React from 'react';
 import WorkflowRuleContainer from './workflow-rule-container';
 
-const WorkflowRulesList = ({ rules, workflow, onSelectFullCustom }) => {
-  const findCount = wf =>
-    wf && wf.retirement && wf.retirement.options ?
-          wf.retirement.options.count : '';
+const WorkflowRulesList = ({
+  rules,
+  workflow,
+  onSaveBasic,
+  onAddRule,
+  onDeleteRule,
+  onSaveRule,
+  onSelectFullCustom,
+  basicCount,
+  onUpdateBasicCount
+}) => {
+  const count = basicCount || '';
 
   const isFullCustom = wf =>
     wf && wf.nero_config && wf.nero_config.full_custom;
-
-  const noOp = () => null;
 
   return (
     <div className="workflow-rules-list">
@@ -23,11 +29,12 @@ const WorkflowRulesList = ({ rules, workflow, onSelectFullCustom }) => {
       </p>
       <p className="workflow-rule-list__rule-option">
         <span className="form-label">Classification Count</span>&nbsp;
-        <input type="text" value={findCount(workflow)} disabled={!workflow} onChange={noOp} />
+        <input type="text" value={count} disabled={!workflow} onChange={onUpdateBasicCount} />
       </p>
       <button
         className="workflow-rule-list__button standard-button"
         disabled={!workflow}
+        onClick={onSaveBasic}
       >Save</button>
       <hr />
       <input
@@ -46,12 +53,23 @@ const WorkflowRulesList = ({ rules, workflow, onSelectFullCustom }) => {
       </p>
       {(rules && rules.length) ?
         <div>
-          {rules.map((rule, idx) => <WorkflowRuleContainer rule={rule} key={idx} disabled={!workflow} />)}
+          { rules.map((rule, idx) => { // eslint-disable-line arrow-body-style
+            return (
+              <WorkflowRuleContainer
+                rule={rule}
+                ruleId={idx}
+                key={idx}
+                disabled={!workflow}
+                onDeleteRule={onDeleteRule}
+                onSaveRule={onSaveRule}
+              />);
+          })}
         </div>
       : <p className="form-label workflow-rule-list__rule-description">&nbsp;&nbsp;No rules have been defined</p>}
       <button
         className="workflow-rule-list__button standard-button"
         disabled={!workflow || isFullCustom(workflow)}
+        onClick={onAddRule}
       >Add Rule</button>
       <hr />
       <input
@@ -86,11 +104,19 @@ const WorkflowRulesList = ({ rules, workflow, onSelectFullCustom }) => {
 WorkflowRulesList.propTypes = {
   rules: React.PropTypes.arrayOf(React.PropTypes.shape({ foo: React.PropTypes.string })),
   workflow: React.PropTypes.shape({}), // TODO: fill this in
-  onSelectFullCustom: React.PropTypes.func
+  onAddRule: React.PropTypes.func,
+  onDeleteRule: React.PropTypes.func,
+  onSaveRule: React.PropTypes.func,
+  onSelectFullCustom: React.PropTypes.func,
+  onSaveBasic: React.PropTypes.func,
+  onUpdateBasicCount: React.PropTypes.func,
+  basicCount: React.PropTypes.string
 };
 
 WorkflowRulesList.defaultProps = {
-  workflow: {}
+  workflow: {},
+  basicCount: '0',
+  onUpdateBasicCount: () => null
 };
 
 export default WorkflowRulesList;

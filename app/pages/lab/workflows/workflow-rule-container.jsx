@@ -12,37 +12,49 @@ class WorkflowRuleContainer extends React.Component {
     };
 
     this.onChangeRule = this.onChangeRule.bind(this);
-    this.onSaveRule = this.onSaveRule.bind(this);
+    this.deleteRule = this.deleteRule.bind(this);
+    this.saveRule = this.saveRule.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.rule) {
-      this.setState({ rule: nextProps.rule });
+      this.setState({ rule: nextProps.rule, dirty: false });
     }
-  }
-
-  onSaveRule() {
-    // TODO: somehow ask container to update rule and save config
-    this.props.workflow.save().then(() => this.setState({ dirty: false }));
-    this.setState({ dirty: false });
   }
 
   onChangeRule(count, answer) {
     this.setState({
-      dirty: true,
-      rule: { answer, count }
+      rule: { answer, count, dirty: true }
     });
   }
 
+  deleteRule() {
+    this.props.onDeleteRule(this.props.ruleId);
+  }
+
+  saveRule() {
+    this.props.onSaveRule(this.props.ruleId, this.state.rule);
+  }
+
   render() {
-    return <ShowRule rule={this.state.rule} onChangeRule={this.onChangeRule} disabled={this.props.disabled} />;
+    return (
+      <ShowRule
+        rule={this.state.rule}
+        onDeleteRule={this.deleteRule}
+        onSaveRule={this.saveRule}
+        onChangeRule={this.onChangeRule}
+        disabled={this.props.disabled}
+      />
+    );
   }
 }
 
 WorkflowRuleContainer.propTypes = {
-  workflow: React.PropTypes.shape({ save: React.PropTypes.func }),
   rule: React.PropTypes.shape({}).isRequired, // TODO: fill this out
-  disabled: React.PropTypes.bool.isRequired
+  ruleId: React.PropTypes.number,
+  disabled: React.PropTypes.bool.isRequired,
+  onDeleteRule: React.PropTypes.func,
+  onSaveRule: React.PropTypes.func
 };
 
 WorkflowRuleContainer.defaultProps = {
