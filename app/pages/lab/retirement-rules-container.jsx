@@ -52,10 +52,10 @@ class RetirementRulesContainer extends React.Component {
     this.setState({ rules: null, selectedWorkflow });
   }
 
-  addRule() {
+  addRule(andThen) {
     const rules = this.state.rules.slice();
     rules.push({ answer: '', count: '', dirty: true });
-    this.setState({ rules });
+    this.setState({ rules }, andThen);
   }
 
   deleteRule(id) {

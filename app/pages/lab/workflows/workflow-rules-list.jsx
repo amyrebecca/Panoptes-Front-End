@@ -7,7 +7,9 @@ const WorkflowRulesList = ({
   rules,
   workflow,
   onSaveBasic,
+  canAddRule,
   onAddRule,
+  onRuleChanged,
   onDeleteRule,
   onSaveRule,
   onSelectFullCustom,
@@ -60,6 +62,7 @@ const WorkflowRulesList = ({
                 ruleId={idx}
                 key={idx}
                 disabled={!workflow}
+                onRuleChanged={onRuleChanged}
                 onDeleteRule={onDeleteRule}
                 onSaveRule={onSaveRule}
               />);
@@ -68,7 +71,7 @@ const WorkflowRulesList = ({
       : <p className="form-label workflow-rule-list__rule-description">&nbsp;&nbsp;No rules have been defined</p>}
       <button
         className="workflow-rule-list__button standard-button"
-        disabled={!workflow || isFullCustom(workflow)}
+        disabled={!workflow || isFullCustom(workflow) || !canAddRule}
         onClick={onAddRule}
       >Add Rule</button>
       <hr />
@@ -104,7 +107,9 @@ const WorkflowRulesList = ({
 WorkflowRulesList.propTypes = {
   rules: React.PropTypes.arrayOf(React.PropTypes.shape({ foo: React.PropTypes.string })),
   workflow: React.PropTypes.shape({}), // TODO: fill this in
+  canAddRule: React.PropTypes.bool,
   onAddRule: React.PropTypes.func,
+  onRuleChanged: React.PropTypes.func,
   onDeleteRule: React.PropTypes.func,
   onSaveRule: React.PropTypes.func,
   onSelectFullCustom: React.PropTypes.func,

@@ -7,8 +7,7 @@ class WorkflowRuleContainer extends React.Component {
     super(props);
 
     this.state = {
-      rule: props.rule,
-      dirty: false
+      rule: props.rule
     };
 
     this.onChangeRule = this.onChangeRule.bind(this);
@@ -17,12 +16,15 @@ class WorkflowRuleContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.rule) {
-      this.setState({ rule: nextProps.rule, dirty: false });
+    // if (nextProps.rule) {
+    if (nextProps.ruleId !== this.props.ruleId) {
+      this.setState({ rule: nextProps.rule });
     }
   }
 
   onChangeRule(count, answer) {
+    this.props.onRuleChanged();
+
     this.setState({
       rule: { answer, count, dirty: true }
     });
@@ -34,6 +36,7 @@ class WorkflowRuleContainer extends React.Component {
 
   saveRule() {
     this.props.onSaveRule(this.props.ruleId, this.state.rule);
+    this.state.rule.dirty = false;
   }
 
   render() {
@@ -53,6 +56,7 @@ WorkflowRuleContainer.propTypes = {
   rule: React.PropTypes.shape({}).isRequired, // TODO: fill this out
   ruleId: React.PropTypes.number,
   disabled: React.PropTypes.bool.isRequired,
+  onRuleChanged: React.PropTypes.func,
   onDeleteRule: React.PropTypes.func,
   onSaveRule: React.PropTypes.func
 };
